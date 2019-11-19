@@ -1,8 +1,10 @@
 import requests
+from bs4 import BeautifulSoup
 
-indeed_result = requests.get("https://www.indeed.co.uk/jobs?q=python&limit=50")
+indeed_requests = requests.get("https://www.indeed.co.uk/jobs?q=python&limit=50")
 
-print(indeed_result)  # Response 200 => success !
+print(indeed_requests)
 
-print(indeed_result.text)
-# get all html ! # we need to pick out data we want to get
+indeed_soup = BeautifulSoup(indeed_requests.text, "html.parser")
+
+print(indeed_soup)
