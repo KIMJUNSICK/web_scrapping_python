@@ -1,5 +1,5 @@
-from indeed import extract_indeed_page
+from indeed import extract_indeed_page, extract_indeed_jobs
 
-max_indeed_page = extract_indeed_page()
+last_indeed_page = extract_indeed_page()
 
-print(max_indeed_page)
+extract_indeed_jobs(last_indeed_page)
