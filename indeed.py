@@ -20,5 +20,8 @@ def extract_indeed_page():
 def extract_indeed_jobs(last_page):
     for page in range(last_page):
         result = requests.get(f"{URL}&start={page*LIMIT}")
-        print(result.status_code)
-
+        soup = BeautifulSoup(result.text, "html.parser")
+        job_cards = soup.find_all("div", {"class": "jobsearch-SerpJobCard"})
+        for job_card in job_cards:
+            title = job_card.find("div", {"class": "title"}).find("a")["title"]
+            print(title)
