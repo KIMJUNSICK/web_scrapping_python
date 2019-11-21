@@ -29,12 +29,19 @@ def extract_indeed_job(job_card):
     company = company.strip()  # for removing empty space
 
     location = job_card.find("span", {"class": "location"}).string
-    return {"title": title, "company": company, "location": location}
+    job_id = job_card["data-jk"]
+    return {
+        "title": title,
+        "company": company,
+        "location": location,
+        "link": f"{URL}&vjk={job_id}",
+    }
 
 
 def extract_indeed_jobs(last_page):
     jobs = []
     for page in range(last_page):
+        print(f"finished scrapping for page {page + 1}")
         result = requests.get(f"{URL}&start={page*LIMIT}")
         soup = BeautifulSoup(result.text, "html.parser")
         job_cards = soup.find_all("div", {"class": "jobsearch-SerpJobCard"})
