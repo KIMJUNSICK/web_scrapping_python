@@ -5,7 +5,7 @@ LIMIT = 50
 URL = f"https://www.indeed.co.uk/jobs?q=python&limit={LIMIT}"
 
 
-def extract_indeed_page():
+def get_last_page():
     result = requests.get(URL)
     soup = BeautifulSoup(result.text, "html.parser")
     pagination = soup.find("div", {"class": "pagination"})
@@ -17,7 +17,7 @@ def extract_indeed_page():
     return last_page
 
 
-def extract_indeed_job(job_card):
+def get_job(job_card):
     title = job_card.find("div", {"class": "title"}).find("a")["title"]
 
     company = job_card.find("span", {"class": "company"})
@@ -38,7 +38,7 @@ def extract_indeed_job(job_card):
     }
 
 
-def extract_indeed_jobs(last_page):
+def get_jobs(last_page):
     jobs = []
     for page in range(last_page):
         print(f"finished scrapping for page {page + 1}")
@@ -46,6 +46,15 @@ def extract_indeed_jobs(last_page):
         soup = BeautifulSoup(result.text, "html.parser")
         job_cards = soup.find_all("div", {"class": "jobsearch-SerpJobCard"})
         for job_card in job_cards:
-            job = extract_indeed_job(job_card)
+            job = get_job(job_card)
             jobs.append(job)
     return jobs
+
+
+def get_indeed_jobs():
+    last_page = get_last_page()
+    jobs = get_jobs(last_page)
+    return jobs
+
+
+print(get_indeed_jobs())
