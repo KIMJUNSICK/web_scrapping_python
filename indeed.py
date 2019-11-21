@@ -17,18 +17,26 @@ def extract_indeed_page():
     return last_page
 
 
+def extract_indeed_job(job_card):
+    title = job_card.find("div", {"class": "title"}).find("a")["title"]
+    company = job_card.find("span", {"class": "company"})
+    company_anchor = company.find("a")
+    if company_anchor is not None:
+        company = str(company_anchor.string)
+    else:
+        company = str(company.string)
+    company = company.strip()  # for removing empty space
+    return {"title": title, "company": company}
+
+
 def extract_indeed_jobs(last_page):
+    jobs = []
     # for page in range(last_page):
     result = requests.get(f"{URL}&start={0*LIMIT}")
     soup = BeautifulSoup(result.text, "html.parser")
     job_cards = soup.find_all("div", {"class": "jobsearch-SerpJobCard"})
     for job_card in job_cards:
-        title = job_card.find("div", {"class": "title"}).find("a")["title"]
-        company = job_card.find("span", {"class": "company"})
-        company_anchor = company.find("a")
-        if company_anchor is not None:
-            company = str(company_anchor.string)
-        else:
-            company = str(company.string)
-        company = company.strip()  # for removing empty space
-        print(title, company)
+        job = extract_indeed_job(job_card)
+        jobs.append(job)
+    return jobs
+
