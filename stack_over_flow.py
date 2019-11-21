@@ -12,9 +12,24 @@ def get_last_page():
     return int(last_pages)
 
 
+def get_job():
+    return []
+
+
+def get_jobs(last_page):
+    jobs = []
+    for page in range(last_page):
+        result = requests.get(f"{URL}&pg={page+1}")
+        soup = BeautifulSoup(result.text, "html.parser")
+        job_summarys = soup.find_all("div", {"class": "-job"})
+        for job_summary in job_summarys:
+            print(job_summary["data-jobid"])
+
+
 def get_stack_over_flow_jobs():
     last_page = get_last_page()
-    return last_page
+    job_summays = get_jobs(last_page)
+    return job_summays
 
 
-print(get_stack_over_flow_jobs())
+get_stack_over_flow_jobs()
