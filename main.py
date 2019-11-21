@@ -1,2 +1,0 @@
-from indeed import extract_indeed_page, extract_indeed_jobs
-
