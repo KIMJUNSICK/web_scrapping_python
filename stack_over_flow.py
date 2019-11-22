@@ -19,24 +19,28 @@ def get_job(job_summary):
     )  # recursive = False is meant that don't dig deeply, only one layer that we request
     # python syntax like 'company, location =' must be used when you know elements
     company = company.get_text(strip=True)
-    location = location.get_text(strip=True).strip("-")
-    print(company, location)
+    location = location.get_text(strip=True).strip("-").strip(" \r").strip("\n")
+    print(location)  # because you want to remove whitespace & dash & line break
+    return {"title": title, "company": company, "location": location}
 
 
 def get_jobs(last_page):
     jobs = []
     for page in range(last_page):
+        print(f"Scrapping for stack0verflow page {page + 1}")
         result = requests.get(f"{URL}&pg={page+1}")
         soup = BeautifulSoup(result.text, "html.parser")
         job_summarys = soup.find_all("div", {"class": "-job"})
         for job_summary in job_summarys:
-            get_job(job_summary)
+            job = get_job(job_summary)
+            jobs.append(job)
+    return jobs
 
 
 def get_stack_over_flow_jobs():
     last_page = get_last_page()
-    job_summays = get_jobs(last_page)
-    return job_summays
+    jobs = get_jobs(last_page)
+    print(jobs)
 
 
 get_stack_over_flow_jobs()
