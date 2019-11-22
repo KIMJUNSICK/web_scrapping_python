@@ -19,7 +19,6 @@ def get_last_page():
 
 def get_job(job_card):
     title = job_card.find("div", {"class": "title"}).find("a")["title"]
-
     company = job_card.find("span", {"class": "company"})
     company_anchor = company.find("a")
     if company_anchor is not None:
@@ -27,7 +26,6 @@ def get_job(job_card):
     else:
         company = str(company.string)
     company = company.strip()  # for removing empty space
-
     location = job_card.find("span", {"class": "location"}).string
     job_id = job_card["data-jk"]
     return {
@@ -41,7 +39,7 @@ def get_job(job_card):
 def get_jobs(last_page):
     jobs = []
     for page in range(last_page):
-        print(f"finished scrapping for page {page + 1}")
+        print(f"Scrapping for indeed page: {page + 1}")
         result = requests.get(f"{URL}&start={page*LIMIT}")
         soup = BeautifulSoup(result.text, "html.parser")
         job_cards = soup.find_all("div", {"class": "jobsearch-SerpJobCard"})
@@ -56,5 +54,3 @@ def get_indeed_jobs():
     jobs = get_jobs(last_page)
     return jobs
 
-
-print(get_indeed_jobs())
