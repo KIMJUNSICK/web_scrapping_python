@@ -12,8 +12,9 @@ def get_last_page():
     return int(last_pages)
 
 
-def get_job():
-    return []
+def get_job(job_summary):
+    title = job_summary.find("div", {"class": "-title"}).find("a").string
+    print(title)
 
 
 def get_jobs(last_page):
@@ -23,7 +24,7 @@ def get_jobs(last_page):
         soup = BeautifulSoup(result.text, "html.parser")
         job_summarys = soup.find_all("div", {"class": "-job"})
         for job_summary in job_summarys:
-            print(job_summary["data-jobid"])
+            get_job(job_summary)
 
 
 def get_stack_over_flow_jobs():
