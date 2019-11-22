@@ -20,8 +20,13 @@ def get_job(job_summary):
     # python syntax like 'company, location =' must be used when you know elements
     company = company.get_text(strip=True)
     location = location.get_text(strip=True).strip("-").strip(" \r").strip("\n")
-    print(location)  # because you want to remove whitespace & dash & line break
-    return {"title": title, "company": company, "location": location}
+    job_id = job_summary["data-jobid"]
+    return {
+        "title": title,
+        "company": company,
+        "location": location,
+        "link": f"https://stackoverflow.com/jobs/{job_id}",
+    }
 
 
 def get_jobs(last_page):
