@@ -14,7 +14,13 @@ def get_last_page():
 
 def get_job(job_summary):
     title = job_summary.find("div", {"class": "-title"}).find("a").string
-    print(title)
+    company, location = job_summary.find("div", {"class": "-company"}).find_all(
+        "span", recursive=False
+    )  # recursive = False is meant that don't dig deeply, only one layer that we request
+    # python syntax like 'company, location =' must be used when you know elements
+    company = company.get_text(strip=True)
+    location = location.get_text(strip=True).strip("-")
+    print(company, location)
 
 
 def get_jobs(last_page):
